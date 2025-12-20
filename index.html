@@ -171,13 +171,14 @@
             transition: var(--transition-smooth);
         }
         
-        .nav-links a:hover,
+        /* FIXED: Hover states don't override active state */
+        .nav-links a:hover:not(.active),
         .nav-links a.active {
             color: var(--text-primary);
             background: rgba(255, 255, 255, 0.05);
         }
         
-        .nav-links a:hover::after,
+        .nav-links a:hover:not(.active)::after,
         .nav-links a.active::after {
             width: 20px;
         }
@@ -724,8 +725,8 @@
     </footer>
     
     <script>
-        // Smooth scrolling with section highlighting
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        // Smooth scrolling with section highlighting - FIXED VERSION
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
@@ -734,15 +735,16 @@
                 
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    // Update active nav link
+                    // Remove active class from all nav links
                     document.querySelectorAll('.nav-links a').forEach(link => {
                         link.classList.remove('active');
                     });
+                    // Add active class to clicked link
                     this.classList.add('active');
                     
-                    // Smooth scroll
+                    // Smooth scroll with offset for fixed navbar
                     window.scrollTo({
-                        top: targetElement.offsetTop - 100,
+                        top: targetElement.offsetTop - 80, // Reduced offset for better alignment
                         behavior: 'smooth'
                     });
                 }
@@ -755,7 +757,7 @@
         
         function updateActiveNav() {
             let current = '';
-            const scrollPosition = window.scrollY + 100;
+            const scrollPosition = window.scrollY + 80; // Adjusted offset
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
@@ -773,17 +775,23 @@
             });
         }
         
-        window.addEventListener('scroll', updateActiveNav);
-        
-        // Back to top button
-        const backToTop = document.getElementById('back-to-top');
+        // Debounce scroll function for better performance
+        let scrollTimeout;
         window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateActiveNav, 50);
+            
+            // Back to top button visibility
+            const backToTop = document.getElementById('back-to-top');
             if (window.scrollY > 500) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
             }
         });
+        
+        // Initialize active nav on page load
+        updateActiveNav();
         
         // Animate stats
         const statNumbers = document.querySelectorAll('.stat-number');
