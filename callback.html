@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Culled - Discord Authentication</title>
+    <title>Prodigy - Discord Authentication</title>
     <style>
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -28,7 +28,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: url('https://i.pinimg.com/1200x/d4/aa/20/d4aa2073fe6345ef4bc47350e9e94358.jpg') center/cover;
+            background: url('https://raw.githubusercontent.com/Xenoscurse/Culled/main/culledbg.jpg') center/cover;
         }
         
         .overlay {
@@ -136,12 +136,12 @@
     <div class="overlay"></div>
     
     <div class="card">
-        <!-- Logo is now outside the status div so it's always visible -->
+        <!-- Logo container -->
         <div class="logo-container">
             <img src="https://raw.githubusercontent.com/Xenoscurse/Culled/main/culledlogo.gif" 
-                 alt="Culled Logo" 
+                 alt="Prodigy Logo" 
                  class="logo"
-                 onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/8b5cf6/ffffff?text=C';">
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/8b5cf6/ffffff?text=P';">
         </div>
         
         <h1 class="gradient-text">Discord Authentication</h1>
@@ -177,7 +177,7 @@
                 <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
                 <h2 class="error">Authentication Failed</h2>
                 <p style="color: #a1a1aa; margin-bottom: 24px;">${error}</p>
-                <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
+                <a href="https://xenoscurse.github.io/Prodigy/" class="button">Return to Prodigy</a>
             `);
         } 
         // No access token in URL
@@ -186,7 +186,7 @@
                 <div style="font-size: 48px; margin-bottom: 16px;">🔗</div>
                 <h2 style="color: #f59e0b; margin-bottom: 16px;">No Authorization Token</h2>
                 <p style="color: #a1a1aa; margin-bottom: 24px;">Please sign in through Discord.</p>
-                <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
+                <a href="https://xenoscurse.github.io/Prodigy/" class="button">Return to Prodigy</a>
             `);
         } 
         // We have an access token - get user data
@@ -194,7 +194,7 @@
             // Clear the hash from URL immediately for security
             window.location.hash = '';
             
-            // Show initial processing state with logo still visible
+            // Show initial processing state
             updateStatus(`
                 <div class="loader"></div>
                 <p style="color: #a1a1aa;">Fetching your Discord profile...</p>
@@ -228,7 +228,12 @@
                     flags: userData.flags
                 };
 
-                // Save to localStorage
+                // Save to localStorage - updated keys to match Prodigy
+                localStorage.setItem('prodigy_discord_user', JSON.stringify(discordUser));
+                localStorage.setItem('prodigy_user_tier', 'free');
+                localStorage.setItem('prodigy_user_id', discordUser.id);
+                
+                // Also keep culled keys for backward compatibility
                 localStorage.setItem('culled_discord_user', JSON.stringify(discordUser));
                 localStorage.setItem('culled_user_tier', 'free');
                 localStorage.setItem('culled_user_id', discordUser.id);
@@ -244,12 +249,12 @@
                     <p style="color: white; margin-bottom: 4px;">@${discordUser.username}</p>
                     <p style="color: #a1a1aa; margin-bottom: 24px; font-size: 14px;">${discordUser.email || 'No email provided'}</p>
                     <div class="small-loader"></div>
-                    <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Culled...</p>
+                    <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Prodigy...</p>
                 `);
 
-                // Redirect back to main site
+                // Redirect back to main site - updated to Prodigy
                 setTimeout(() => {
-                    window.location.href = 'https://xenoscurse.github.io/Culled/';
+                    window.location.href = 'https://xenoscurse.github.io/Prodigy/';
                 }, 2000);
             })
             .catch(error => {
@@ -258,13 +263,19 @@
                 // Fallback to mock data if Discord API fails
                 const fallbackUser = {
                     id: Date.now().toString(),
-                    username: 'discord_user',
-                    global_name: 'Culled User',
-                    email: 'user@discord.com',
+                    username: 'prodigy_user',
+                    global_name: 'Prodigy User',
+                    email: 'user@prodigy.com',
                     avatar: null,
                     discriminator: '0000'
                 };
                 
+                // Save to localStorage - updated keys
+                localStorage.setItem('prodigy_discord_user', JSON.stringify(fallbackUser));
+                localStorage.setItem('prodigy_user_tier', 'free');
+                localStorage.setItem('prodigy_user_id', fallbackUser.id);
+                
+                // Also keep culled keys
                 localStorage.setItem('culled_discord_user', JSON.stringify(fallbackUser));
                 localStorage.setItem('culled_user_tier', 'free');
                 localStorage.setItem('culled_user_id', fallbackUser.id);
@@ -272,14 +283,14 @@
                 updateStatus(`
                     <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
                     <h2 style="color: #f59e0b; margin-bottom: 16px;">Using Demo Mode</h2>
-                    <p style="color: white; margin-bottom: 8px;">Signed in as Culled User</p>
+                    <p style="color: white; margin-bottom: 8px;">Signed in as Prodigy User</p>
                     <p style="color: #a1a1aa; margin-bottom: 24px;">Couldn't fetch real Discord data.</p>
                     <div class="small-loader"></div>
-                    <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Culled...</p>
+                    <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Prodigy...</p>
                 `);
                 
                 setTimeout(() => {
-                    window.location.href = 'https://xenoscurse.github.io/Culled/';
+                    window.location.href = 'https://xenoscurse.github.io/Prodigy/';
                 }, 2000);
             });
         }
@@ -287,7 +298,7 @@
         // Add fallback for if Discord doesn't redirect properly
         setTimeout(() => {
             if (document.querySelector('.loader')) {
-                window.location.href = 'https://xenoscurse.github.io/Culled/';
+                window.location.href = 'https://xenoscurse.github.io/Prodigy/';
             }
         }, 5000);
     </script>
