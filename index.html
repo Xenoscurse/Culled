@@ -112,22 +112,6 @@
             opacity: 0.5;
         }
         
-        /* Smooth typing effect - cursor animation */
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background-color: #a855f7;
-            margin-left: 2px;
-            vertical-align: middle;
-            animation: cursor-blink 1s infinite;
-        }
-        
-        @keyframes cursor-blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        
         /* Options dropdown styling */
         .options-dropdown {
             background: rgba(24, 24, 27, 0.95);
@@ -620,11 +604,11 @@
 
     <script>
         // =============================================
-        // ===== SMOOTH SCROLLING & TYPING EFFECTS =====
+        // ===== SMOOTH SCROLLING (NO TYPING EFFECTS) =====
         // =============================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded - initializing with smooth effects...');
+            console.log('DOM loaded - initializing...');
             
             // Add smooth scroll to all anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -691,64 +675,9 @@
                 });
             }
             
-            // ===== SMOOTH TYPING EFFECT =====
-            const inputCode = document.getElementById('inputCode');
-            
-            if (inputCode) {
-                // Add typing cursor effect
-                const cursor = document.createElement('span');
-                cursor.className = 'typing-cursor';
-                
-                inputCode.addEventListener('focus', function() {
-                    this.parentElement.appendChild(cursor);
-                });
-                
-                inputCode.addEventListener('blur', function() {
-                    if (cursor.parentNode) {
-                        cursor.parentNode.removeChild(cursor);
-                    }
-                });
-                
-                // Smooth typing simulation for examples
-                const originalSetExample = window.setExample;
-                window.setExample = function(lang) {
-                    if (inputCode && EXAMPLES[lang]) {
-                        const targetText = EXAMPLES[lang];
-                        const currentText = inputCode.value;
-                        
-                        // Clear current text with a smooth effect
-                        if (currentText.length > 0) {
-                            let i = currentText.length;
-                            const clearInterval = setInterval(() => {
-                                if (i > 0) {
-                                    inputCode.value = currentText.substring(0, i - 1);
-                                    i--;
-                                } else {
-                                    clearInterval(clearInterval);
-                                    // Type new text
-                                    typeText(targetText, 0);
-                                }
-                            }, 5);
-                        } else {
-                            typeText(targetText, 0);
-                        }
-                        
-                        if (languageSelect) languageSelect.value = lang;
-                        if (inputFileName) inputFileName.textContent = `Input.${lang}`;
-                        if (outputFileName) outputFileName.textContent = `Output.${lang}`;
-                    }
-                };
-                
-                function typeText(text, index) {
-                    if (index < text.length) {
-                        inputCode.value = text.substring(0, index + 1);
-                        setTimeout(() => typeText(text, index + 1), 10);
-                    }
-                }
-            }
-            
             // ===== LANGUAGE EXAMPLE BUTTONS =====
             const exampleButtons = document.querySelectorAll('[data-lang]');
+            const inputCode = document.getElementById('inputCode');
             const languageSelect = document.getElementById('languageSelect');
             const inputFileName = document.getElementById('inputFileName');
             const outputFileName = document.getElementById('outputFileName');
@@ -854,10 +783,7 @@ public:
 };`
             };
             
-            // Make EXAMPLES globally accessible
-            window.EXAMPLES = EXAMPLES;
-            
-            // Function to set example (non-smooth version for initial load)
+            // Function to set example (instant, no smooth typing)
             function setExample(lang) {
                 if (inputCode && EXAMPLES[lang]) {
                     inputCode.value = EXAMPLES[lang];
@@ -867,6 +793,7 @@ public:
                 }
             }
             
+            // Make setExample globally available
             window.setExample = setExample;
             
             // Attach click handlers to example buttons
@@ -874,12 +801,7 @@ public:
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     const lang = this.getAttribute('data-lang');
-                    // Use smooth typing version
-                    if (window.setExampleSmooth) {
-                        window.setExampleSmooth(lang);
-                    } else {
-                        setExample(lang);
-                    }
+                    setExample(lang);
                 });
             });
             
@@ -1054,7 +976,7 @@ end
                 });
             }
             
-            console.log('Initialization complete with smooth effects');
+            console.log('Initialization complete');
         });
     </script>
 </body>
