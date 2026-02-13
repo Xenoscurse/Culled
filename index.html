@@ -264,7 +264,7 @@
                     <a href="#dashboard" data-action="dashboard">Dashboard</a>
                     <a href="https://github.com/Xenoscurse/Prodigy" target="_blank" data-action="github">GitHub</a>
                     <div class="divider"></div>
-                    <button id="dropdownSignInBtn" data-action="signin">Sign In</button>
+                    <button data-action="signin" class="dropdown-signin">Sign In</button>
                 </div>
             </div>
             
@@ -575,7 +575,7 @@
         </footer>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Login Modal (Hidden by default) -->
     <div id="loginModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm transition-all duration-300">
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
             <div class="flex justify-between items-center mb-6">
@@ -604,7 +604,27 @@
 
     <script>
         // =============================================
-        // ===== SMOOTH SCROLLING (NO TYPING EFFECTS) =====
+        // ===== DISCORD OAUTH CONFIGURATION =====
+        // =============================================
+        
+        const DISCORD_CONFIG = {
+            CLIENT_ID: '1464021428725747733',
+            REDIRECT_URI: 'https://xenoscurse.github.io/Prodigy/callback.html',
+            SCOPES: 'identify email'
+        };
+
+        // =============================================
+        // ===== DISCORD LOGIN FUNCTION =====
+        // =============================================
+        
+        function loginWithDiscord() {
+            const redirectUri = encodeURIComponent(DISCORD_CONFIG.REDIRECT_URI);
+            const scope = encodeURIComponent(DISCORD_CONFIG.SCOPES);
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CONFIG.CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
+        }
+
+        // =============================================
+        // ===== SMOOTH SCROLLING =====
         // =============================================
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -676,7 +696,8 @@
                         }
                         else if (action === 'signin') {
                             e.preventDefault();
-                            showLoginModal();
+                            // Direct Discord login without modal
+                            loginWithDiscord();
                         }
                         // For GitHub link (action="github"), let it work normally
                     });
@@ -821,49 +842,18 @@ public:
                 });
             }
             
-            // ===== LOGIN MODAL =====
-            const loginModal = document.getElementById('loginModal');
-            const modalContent = document.getElementById('modalContent');
+            // ===== DASHBOARD SIGN IN BUTTON =====
             const dashboardSignInBtn = document.getElementById('dashboardSignInBtn');
-            const modalLoginBtn = document.getElementById('modalLoginBtn');
-            
-            function showLoginModal() {
-                if (loginModal) {
-                    loginModal.style.display = 'flex';
-                    setTimeout(() => {
-                        if (modalContent) {
-                            modalContent.classList.remove('scale-95', 'opacity-0');
-                            modalContent.classList.add('scale-100', 'opacity-100');
-                        }
-                    }, 10);
-                }
-            }
-            
-            function hideLoginModal() {
-                if (modalContent) {
-                    modalContent.classList.add('scale-95', 'opacity-0');
-                    modalContent.classList.remove('scale-100', 'opacity-100');
-                    setTimeout(() => {
-                        if (loginModal) loginModal.style.display = 'none';
-                    }, 300);
-                } else {
-                    if (loginModal) loginModal.style.display = 'none';
-                }
-            }
-            
-            window.showLoginModal = showLoginModal;
-            window.hideLoginModal = hideLoginModal;
             
             if (dashboardSignInBtn) {
-                dashboardSignInBtn.addEventListener('click', showLoginModal);
-            }
-            
-            if (modalLoginBtn) {
-                modalLoginBtn.addEventListener('click', function() {
-                    const redirectUri = encodeURIComponent('https://xenoscurse.github.io/Prodigy/callback.html');
-                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=1464021428725747733&redirect_uri=${redirectUri}&response_type=token&scope=identify%20email`;
+                dashboardSignInBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loginWithDiscord();
                 });
             }
+            
+            // Note: The login modal is not used anymore - direct Discord redirect
+            // But we keep the modal in case you want to use it later
             
             // ===== OBFUSCATION =====
             const obfuscateBtn = document.getElementById('obfuscateBtn');
