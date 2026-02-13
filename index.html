@@ -98,7 +98,7 @@
     </style>
 </head>
 <body class="min-h-screen text-white relative antialiased">
-    <!-- Background - FIXED: Now using GitHub raw URL -->
+    <!-- Background -->
     <div class="fixed inset-0 z-0 will-change-transform">
         <img src="https://raw.githubusercontent.com/Xenoscurse/Culled/main/culledbg.jpg" 
              alt="Background" 
@@ -144,7 +144,7 @@
             </button>
         </nav>
 
-        <!-- Logo - FIXED: Now using GitHub raw URL -->
+        <!-- Logo -->
         <header class="fixed top-6 left-6 z-50">
             <div class="flex items-center gap-3 px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl shadow-lg">
                 <img src="https://raw.githubusercontent.com/Xenoscurse/Culled/main/culledlogo.gif" 
@@ -182,12 +182,12 @@
                 </div>
                 
                 <p class="text-xs text-zinc-600 mt-4 text-center">
-                    Keys are provided after purchase via SellAuth
+                    Keys are provided after purchase via email
                 </p>
             </div>
         </div>
 
-        <!-- Hero Section - FIXED: Now using GitHub raw URL -->
+        <!-- Hero Section -->
         <section class="pt-32 pb-12 px-6">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="flex justify-center mb-6 animate-float">
@@ -271,7 +271,7 @@ end</textarea>
                         </div>
                     </div>
 
-                    <!-- Output -->
+                    <!-- Output - FIXED: Clean message without extra spaces -->
                     <div class="relative group">
                         <div class="relative bg-zinc-950/70 border border-zinc-800/50 rounded-2xl overflow-hidden">
                             <div class="px-4 py-3 border-b border-zinc-800/50 flex items-center justify-between">
@@ -285,9 +285,9 @@ end</textarea>
                             </div>
                             <div id="outputCode" 
                                  class="w-full h-96 bg-transparent text-green-400 p-4 font-mono text-sm overflow-auto whitespace-pre-wrap break-words leading-relaxed">
-                                -- Your obfuscated code will appear here.
--- Click "Obfuscate" to protect your code.
--- Upgrade to Pro or Premium for advanced features.
+-- Your obfuscated code will appear here
+-- Click "Obfuscate" to protect your code
+-- Upgrade to Pro or Premium for advanced features
                             </div>
                         </div>
                     </div>
@@ -528,10 +528,10 @@ end</textarea>
                         </li>
                     </ul>
                     
-                    <button onclick="purchaseTier('pro')" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-purple-600/30">
+                    <button onclick="window.location.href='pay.html?tier=pro'" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-purple-600/30">
                         Purchase Pro · $5.99/mo
                     </button>
-                    <p class="text-xs text-center text-zinc-500 mt-3">via SellAuth · Keys Emailed</p>
+                    <p class="text-xs text-center text-zinc-500 mt-3">via Venmo/CashApp · Keys Emailed</p>
                 </div>
 
                 <!-- Premium Tier -->
@@ -576,20 +576,20 @@ end</textarea>
                         </li>
                     </ul>
                     
-                    <button onclick="purchaseTier('premium')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-200 font-medium">
+                    <button onclick="window.location.href='pay.html?tier=premium'" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-200 font-medium">
                         Purchase Premium · $7.99/mo
                     </button>
-                    <p class="text-xs text-center text-zinc-500 mt-3">via SellAuth · Keys Emailed</p>
+                    <p class="text-xs text-center text-zinc-500 mt-3">via Venmo/CashApp · Keys Emailed</p>
                 </div>
             </div>
             
-            <!-- SellAuth Trust Badge -->
+            <!-- Payment Trust Badge -->
             <div class="flex justify-center mt-12">
                 <div class="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 rounded-full px-6 py-3 inline-flex items-center gap-3">
                     <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
-                    <span class="text-sm text-zinc-300">Secure Payments Powered by <span class="font-bold text-white">SellAuth</span> · Keys Emailed</span>
+                    <span class="text-sm text-zinc-300">Pay with Venmo · CashApp · Crypto · Keys Emailed</span>
                 </div>
             </div>
         </section>
@@ -718,10 +718,11 @@ end</textarea>
             SCOPES: 'identify email'
         };
 
-        // ----- SELLAUTH SETTINGS -----
-        const SELLAUTH_CONFIG = {
-            PRO_PRODUCT_ID: 'https://culled.mysellauth.com/product/culled-pro',        // Pro 
-            PREMIUM_PRODUCT_ID: 'https://culled.mysellauth.com/product/culled-premium' // Premium 
+        // ----- PAYMENT SETTINGS -----
+        const PAYMENT_CONFIG = {
+            VENMO: '@Xenoscurse',
+            CASHAPP: '$Xenoscurse',
+            EMAIL: 'culled@proton.me'
         };
 
         // ----- PRICING TIERS -----
@@ -808,9 +809,20 @@ print(message)`
         // ===== END EASY EDIT SECTION =====
         // =============================================
 
+        // ----- Cross-Device Storage Keys -----
+        const STORAGE_KEYS = {
+            USER_ID: 'culled_user_id',
+            TIER: 'culled_user_tier',
+            USAGE: 'culled_usage',
+            LICENSE_KEY: 'culled_license_key',
+            LICENSE_TIER: 'culled_license_tier',
+            DISCORD_USER: 'culled_discord_user',
+            SUBSCRIPTION: 'culled_subscription'
+        };
+
         // ----- License Key Storage -----
-        let activeLicenseKey = localStorage.getItem('culled_license_key') || null;
-        let licenseTier = localStorage.getItem('culled_license_tier') || null;
+        let activeLicenseKey = localStorage.getItem(STORAGE_KEYS.LICENSE_KEY) || null;
+        let licenseTier = localStorage.getItem(STORAGE_KEYS.LICENSE_TIER) || null;
 
         // ----- Key Activation Functions -----
         window.showKeyModal = function() {
@@ -828,15 +840,15 @@ print(message)`
                 return;
             }
 
-            // Mock key validation - In production, this would verify with SellAuth API
+            // Mock key validation - In production, you would verify against your database
             if (key.length >= 16) {
                 // Simulate key validation
                 const tier = confirm('Is this a Pro key? Click OK for Pro, Cancel for Premium') ? 'pro' : 'premium';
                 
                 activeLicenseKey = key;
                 licenseTier = tier;
-                localStorage.setItem('culled_license_key', key);
-                localStorage.setItem('culled_license_tier', tier);
+                localStorage.setItem(STORAGE_KEYS.LICENSE_KEY, key);
+                localStorage.setItem(STORAGE_KEYS.LICENSE_TIER, tier);
                 
                 // Activate the tier
                 currentUser.tier = tier;
@@ -846,8 +858,8 @@ print(message)`
                     expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString(),
                     licenseKey: key
                 };
-                localStorage.setItem('culled_user_tier', tier);
-                localStorage.setItem('culled_subscription', JSON.stringify(currentUser.subscription));
+                localStorage.setItem(STORAGE_KEYS.TIER, tier);
+                localStorage.setItem(STORAGE_KEYS.SUBSCRIPTION, JSON.stringify(currentUser.subscription));
                 
                 updateUI();
                 updateDashboard();
@@ -906,15 +918,15 @@ print(message)`
 
         // ----- User State Management -----
         let currentUser = {
-            id: localStorage.getItem('culled_user_id') || 'anonymous_' + Math.random().toString(36).substr(2, 9),
-            tier: localStorage.getItem('culled_user_tier') || 'free',
-            subscription: JSON.parse(localStorage.getItem('culled_subscription') || 'null'),
-            usage: JSON.parse(localStorage.getItem('culled_usage') || '{}'),
-            discordUser: JSON.parse(localStorage.getItem('culled_discord_user') || 'null')
+            id: localStorage.getItem(STORAGE_KEYS.USER_ID) || 'anonymous_' + Math.random().toString(36).substr(2, 9),
+            tier: localStorage.getItem(STORAGE_KEYS.TIER) || 'free',
+            subscription: JSON.parse(localStorage.getItem(STORAGE_KEYS.SUBSCRIPTION) || 'null'),
+            usage: JSON.parse(localStorage.getItem(STORAGE_KEYS.USAGE) || '{}'),
+            discordUser: JSON.parse(localStorage.getItem(STORAGE_KEYS.DISCORD_USER) || 'null')
         };
 
-        if (!localStorage.getItem('culled_user_id')) {
-            localStorage.setItem('culled_user_id', currentUser.id);
+        if (!localStorage.getItem(STORAGE_KEYS.USER_ID)) {
+            localStorage.setItem(STORAGE_KEYS.USER_ID, currentUser.id);
         }
 
         // ----- Discord OAuth -----
@@ -942,7 +954,7 @@ print(message)`
 
         window.logout = function() {
             currentUser.discordUser = null;
-            localStorage.removeItem('culled_discord_user');
+            localStorage.removeItem(STORAGE_KEYS.DISCORD_USER);
             setTier('free');
             document.getElementById('loginBtn').classList.remove('hidden');
             document.getElementById('logoutBtn').classList.add('hidden');
@@ -970,8 +982,8 @@ print(message)`
                             avatar: user.avatar,
                             discriminator: user.discriminator || '0'
                         };
-                        localStorage.setItem('culled_discord_user', JSON.stringify(discordUser));
-                        localStorage.setItem('culled_user_id', user.id);
+                        localStorage.setItem(STORAGE_KEYS.DISCORD_USER, JSON.stringify(discordUser));
+                        localStorage.setItem(STORAGE_KEYS.USER_ID, user.id);
                         window.location.reload();
                     })
                     .catch(() => {});
@@ -1096,7 +1108,7 @@ print(message)`
             if (currentUser.tier === 'free') {
                 const today = getTodayKey();
                 currentUser.usage[today] = (currentUser.usage[today] || 0) + 1;
-                localStorage.setItem('culled_usage', JSON.stringify(currentUser.usage));
+                localStorage.setItem(STORAGE_KEYS.USAGE, JSON.stringify(currentUser.usage));
             }
             updateUI();
             updateUsageStats();
@@ -1105,12 +1117,12 @@ print(message)`
         // ----- Tier Management -----
         function setTier(tier) {
             currentUser.tier = tier;
-            localStorage.setItem('culled_user_tier', tier);
+            localStorage.setItem(STORAGE_KEYS.TIER, tier);
             if (tier === 'free') {
                 currentUser.subscription = null;
-                localStorage.removeItem('culled_subscription');
-                localStorage.removeItem('culled_license_key');
-                localStorage.removeItem('culled_license_tier');
+                localStorage.removeItem(STORAGE_KEYS.SUBSCRIPTION);
+                localStorage.removeItem(STORAGE_KEYS.LICENSE_KEY);
+                localStorage.removeItem(STORAGE_KEYS.LICENSE_TIER);
                 activeLicenseKey = null;
                 licenseTier = null;
             }
@@ -1119,22 +1131,13 @@ print(message)`
         }
 
         window.purchaseTier = function(tier) {
-            const productIds = {
-                pro: SELLAUTH_CONFIG.PRO_PRODUCT_ID,
-                premium: SELLAUTH_CONFIG.PREMIUM_PRODUCT_ID
-            };
-            
-            if (confirm(`Purchase ${tier.toUpperCase()} for $${TIERS[tier].price}/month?`)) {
-                window.open(`https://sellauth.com/product/${productIds[tier]}`, '_blank');
-                alert('After purchase, you will receive a license key via email. Use the "Activate Key" option in the menu to activate your subscription.');
-                showKeyModal();
-            }
+            window.location.href = `pay.html?tier=${tier}`;
         };
 
         window.cancelSubscription = function() {
             setTier('free');
             currentUser.subscription = null;
-            localStorage.removeItem('culled_subscription');
+            localStorage.removeItem(STORAGE_KEYS.SUBSCRIPTION);
             hideCancelModal();
             updateDashboard();
             alert('Your subscription has been cancelled. You will be downgraded to Free tier at the end of your billing period.');
